@@ -1,0 +1,24 @@
+### Empty Post
+POST http://127.0.0.1:8080/api/users
+Content-Type: application/json
+
+### Valid User
+POST http://127.0.0.1:8080/api/users
+Content-Type: application/json
+
+{"user" : {
+  "email": "{{$uuid}}@tt.com",
+  "username": "{{$uuid}}",
+  "password": "{{$uuid}}"
+}}
+
+### Login
+POST http://127.0.0.1:8080/api/users/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "u1647289243@mail.com",
+    "password": "password"
+  }
+}

@@ -1,0 +1,16 @@
+# IntelliJ
+.idea
+*.iml
+
+# Flutter
+flutter_frontend/.dart_tool
+flutter_frontend/.flutter-plugins
+flutter_frontend/.flutter-plugins-dependencies
+flutter_frontend/.packages
+
+# Dart
+dart_backend/.dart_tool
+dart_backend/.packages
+
+# Build
+flutter_frontend/build

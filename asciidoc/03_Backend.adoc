@@ -1,0 +1,162 @@
+# Backend
+
+## Package (pubspec.yaml)
+
+[source,yaml]
+----
+name: dart_real_world_app
+description: A Demo implementation for a Real World Project
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.16.0-134.5.beta <3.0.0'
+
+dependencies:
+  mongo_dart: 0.7.4
+  dart_jsonwebtoken: ^2.4.1
+  dotenv: ^3.0.0
+  shelf: ^1.2.0
+  shelf_router: ^1.1.2
+  shelf_cors_headers: ^0.1.2
+  uuid: ^3.0.6
+
+dev_dependencies:
+  lints: ^1.0.0
+  build_runner: ^2.1.4
+----
+
+## server.dart
+[source,dart]
+----
+void main(List<String> arguments) async {
+  final environmentConfig = EnvironmentConfig();
+  final mongoConfig = MongoConfig(environmentConfig);
+  final serviceConfig = ServiceConfig(mongoConfig.getConnection(), environmentConfig);
+  final apiConfig = ApiRouteConfig(serviceConfig);
+  final apiMiddleware = ApiMiddlewareConfig(environmentConfig);
+
+  var handlerPipeline = Pipeline()
+      .addMiddleware(apiMiddleware.logging())
+      .addMiddleware(apiMiddleware.security())
+      .addMiddleware(corsHeaders())
+      .addMiddleware(apiMiddleware.jsonHeader())
+      .addHandler(apiConfig.handler);
+
+  final server = await io.serve(handlerPipeline, environmentConfig.webServer, environmentConfig.webPort);
+  print('API Service: http://${server.address.host}:${server.port}/api');
+}
+----
+
+## api_route_config.dart
+
+[source,dart]
+----
+ ApiRouteConfig(ServiceConfig serviceConfig) {
+    _userApi = UserApi(serviceConfig.userService);
+    _usersApi = UsersApi(serviceConfig.userService);
+    _profilesApi = ProfilesApi(serviceConfig.userService);
+    _articlesApi =
+        ArticlesApi(serviceConfig.articleService, serviceConfig.articleFavoriteService, serviceConfig.commentService);
+    _tagsApi = TagsApi(serviceConfig.tagService);
+
+    handler = Router()
+      ..mount('/api/users', (request) => _usersApi.handler(request))
+      ..mount('/api/user', (request) => _userApi.handler(request))
+      ..mount('/api/profiles', (request) => _profilesApi.handler(request))
+      ..mount('/api/articles', (request) => _articlesApi.handler(request))
+      ..mount('/api/tags', (request) => _tagsApi.handler(request))
+      ..mount('/api/health', (request) => Response.ok(DateTime.now().toString()));
+----
+
+## user_api.dart
+
+[source,dart]
+----
+  Handler get handler {
+    final _handler = Router()
+      ..get('/', (Request request) => getUserDetails(request))
+      ..put('/', (Request request) => updateUserDetails(request));
+    return _handler;
+  }
+----
+
+[source,dart]
+----
+  Future<Response> getUserDetails(Request request) async {
+    try {
+      final currentUser = request.headers[sysValCurrentUser];
+      if (currentUser == null) {
+        throw ApplicationException('User not logged in');
+      }
+      var json = await userService.getUserDetails(currentUser);
+      return Response(200, body: json.toJson());
+    } on UnauthorizedException catch (error) {
+      return Response(401, body: error.report.toJson());
+    } catch (error) {
+      print(error);
+      return Response(422);
+    }
+  }
+----
+
+## user_service.dart
+
+[source,dart]
+----
+  Future<UserDetails> getUserDetails(String currentUser) async {
+    var col = db.collection(MongoCollection.user);
+    var check = await col.find(where.eq('username', currentUser)).toList();
+    if (check.isNotEmpty) {
+      return UserDetails.fromMap(check.first);
+    } else {
+      throw ApplicationException('username not exists');
+    }
+  }
+----
+
+## user_model.dart
+
+[source,dart]
+----
+class UserDetails {
+  late final String email;
+  late final String username;
+  String? token;
+  String? bio;
+  String? image;
+
+  UserDetails({required this.email, required this.username, this.token, this.bio, this.image});
+
+  String toJson() {
+    return '''
+    {"user": {
+      "email": ${jsonEncode(email)},
+      "username": ${jsonEncode(username)},
+      "token": ${jsonEncode(token)},
+      "bio": ${jsonEncode(bio)},
+      "image": ${jsonEncode(image)}
+    }}
+    ''';
+  }
+
+  UserDetails.fromMap(Map<String, dynamic> data) {
+    email = data['email'];
+    username = data['username'];
+    bio = data['bio'];
+    image = data['image'];
+  }
+}
+----
+
+## To investigate
+
+* Code Generation https://pub.dev/packages/json_serializable[]
+* Framework: https://pub.dev/packages/chopper[]
+
+## To consider
+
+* Strongly dependent on Community
+* Single Thread as JavaScript, Isolate (Worker), scalability
+
+xref:02_Dart.adoc[<-] xref:04_Frontend.adoc[->]

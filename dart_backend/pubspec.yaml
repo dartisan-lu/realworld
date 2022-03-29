@@ -1,0 +1,20 @@
+name: dart_real_world_app
+description: A Demo implementation for a Real World Project
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.16.0-134.5.beta <3.0.0'
+
+dependencies:
+  mongo_dart: 0.7.4
+  dart_jsonwebtoken: ^2.4.1
+  dotenv: ^3.0.0
+  shelf: ^1.2.0
+  shelf_router: ^1.1.2
+  shelf_cors_headers: ^0.1.2
+  uuid: ^3.0.6
+
+dev_dependencies:
+  lints: ^1.0.0
+  build_runner: ^2.1.4

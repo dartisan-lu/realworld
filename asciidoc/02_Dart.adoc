@@ -1,0 +1,46 @@
+# Dart
+
+## https://dart.dev/guides/language/language-tour[Language]
+
+* Dart is strongly typed
+* Dart supports null safety
+* Not cryptic, Not verbose
+
+[source,dart]
+----
+int counter = 0;
+var counter = 0;
+const counter = 0;
+
+
+hello() {
+  print('Hello World');
+}
+var vhello = hello;
+
+
+var arr = <int>[];
+var map = <String,int> {};
+
+int? sum;
+sum = null;
+
+var even = sum?.even();
+var next = sum!;
+var next = sum??0;
+
+class Calculator {
+  final int var1;
+  final String var2;
+  late int var3;
+  int? var4;
+  Calculator(this.var1, {required this.var2, this.var4}) {
+    var3 = 3;
+  }
+}
+var calculator = Calculator(1, {var4:'var4', var2:'var2'});
+
+----
+
+
+xref:01_Intro.adoc[<-] xref:03_Backend.adoc[->]

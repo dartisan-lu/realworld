@@ -1,0 +1,224 @@
+# Frontend
+
+## Package (pubspec.yaml)
+
+[source,yaml]
+----
+name: flutter_real_world_example_app
+description: A Demo implementation for a Real World
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.15.0-268.18.beta <3.0.0"
+
+dependencies:
+  # flutter:
+  flutter_web_plugins:
+    sdk: flutter
+  http: ^0.13.3
+  intl: ^0.17.0
+  provider: ^6.0.2
+  url_launcher: ^6.0.18
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+----
+
+## app_theme.dart
+[source,dart]
+----
+final ThemeData defaultTheme = ThemeData(
+    primarySwatch: generateMaterialColor(const Color(0xFF5cb85c)),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    iconTheme: const IconThemeData(color: Color(0xFF5cb85c)),
+    appBarTheme: const AppBarTheme(color: Colors.white));
+
+MaterialColor generateMaterialColor(Color color) {
+  return MaterialColor(color.value, {
+    50: Color.fromRGBO(color.red, color.green, color.blue, 0.1),
+    100: Color.fromRGBO(color.red, color.green, color.blue, 0.2),
+    200: Color.fromRGBO(color.red, color.green, color.blue, 0.3),
+    300: Color.fromRGBO(color.red, color.green, color.blue, 0.4),
+    400: Color.fromRGBO(color.red, color.green, color.blue, 0.5),
+    500: Color.fromRGBO(color.red, color.green, color.blue, 0.6),
+    600: Color.fromRGBO(color.red, color.green, color.blue, 0.7),
+    700: Color.fromRGBO(color.red, color.green, color.blue, 0.8),
+    800: Color.fromRGBO(color.red, color.green, color.blue, 0.9),
+    900: Color.fromRGBO(color.red, color.green, color.blue, 1.0),
+  });
+}
+
+extension CustomColorSchemeX on ColorScheme {
+  Color get rwBrown => const Color.fromARGB(255, 53, 53, 53);
+  Color get rwLightGray => const Color.fromARGB(255, 187, 187, 187);
+  Color get rwDarkGray => const Color.fromARGB(255, 129, 138, 145);
+  Color get rwWhite => const Color.fromARGB(255, 243, 243, 243);
+  Color get rwLogoutColor => const Color.fromARGB(255, 184, 92, 92);
+}
+----
+
+----
+backgroundColor: Theme.of(context).colorScheme.rwDarkGray);
+----
+
+## main.dart
+[source,dart]
+----
+void main() {
+  configureApp();
+  runApp(const ProviderContextApp());
+}
+
+class ProviderContextApp extends StatelessWidget {
+  const ProviderContextApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => LoginState(),
+      child: const RealWorldApp(),
+    );
+  }
+}
+----
+
+## comment_list.dar
+[source,dart]
+----
+class CommentList extends StatefulWidget {
+  final Article article;
+
+  const CommentList(this.article, {Key? key}) : super(key: key);
+
+  @override
+  State<CommentList> createState() => _CommentListState();
+}
+
+class _CommentListState extends State<CommentList> {
+  final commentService = CommentService(http.Client());
+
+  @override
+  Widget build(BuildContext context) {
+    refresh() {
+      print(widget.article.slug);
+      setState(() {});
+    }
+  ...
+----
+
+## article_scaffold.dart
+[source,dart]
+----
+class ArticleScaffold extends StatelessWidget {
+  final String articleLink;
+
+  final articleService = ArticleService(http.Client());
+
+  ArticleScaffold(this.articleLink, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const MenuBar()),
+      body: FutureBuilder<Article?>(
+          future: articleService.fetchArticle(articleLink),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return ArticleDetail(snapshot.data!);
+            } else {
+              return const SizedBox();
+            }
+          }),
+    );
+  }
+}
+----
+
+
+## article_detail.dart
+[source,dart]
+----
+class ArticleDetail extends StatelessWidget {
+  final Article article;
+
+  const ArticleDetail(this.article, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Container(
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                    child: Text(
+                      article.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                      ),
+                    )),
+                ArticleCreator(article)
+              ],
+            ),
+          ),
+          color: Theme.of(context).colorScheme.rwBrown,
+          padding: const EdgeInsets.fromLTRB(0, 32, 0, 32)),
+      Container(
+          margin: const EdgeInsets.fromLTRB(150, 20, 150, 0),
+          child: Wrap(
+            spacing: 30,
+            runSpacing: 30,
+            children: [
+              Text(
+                article.body,
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              ListView(primary: true, shrinkWrap: true, children: <Widget>[
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List<Widget>.generate(article.tagList.length,
+                        (int index) {
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                        child: ArticleCategory(article.tagList[index]),
+                      );
+                    }).toList())
+              ]),
+              Divider(
+                color: Theme.of(context).colorScheme.rwLightGray,
+              ),
+            ],
+          )),
+      Expanded(child: CommentList(article)),
+      const FooterBar()
+    ]);
+  }
+}
+----
+
+## To investigate
+
+* Theming
+* Restructuring elements for Scrollable Page
+* Make it more Web-Like (Copy/Paste labels, navigation...)
+
+## To consider
+
+* Web like vs Canvas Application like
+* Knowledge learning curve: Widgets, Compose Flexible and Scrollable elements
+
+xref:03_Backend.adoc[<-] xref:05_Docker.adoc[->]

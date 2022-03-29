@@ -1,0 +1,61 @@
+version: '3'
+
+# RUNNING FULL ENVIRONMENT
+# - MangoDB
+# - MongoDB Console
+# - Dart Backend + Flutter
+
+services:
+
+  mongodb:
+    container_name: dart_mongodb
+    hostname: mongodb
+    image: mongo:4.2.3
+    ports:
+      - "27017:27017"
+      - "28017:28017"
+    environment:
+      # - MONGO_INITDB_DATABASE=realworld
+      # - MONGO_INITDB_ROOT_USERNAME=master
+      # - MONGO_INITDB_ROOT_PASSWORD=letmein
+      - AUTH=no
+    networks:
+      - mongonet
+
+  mongo-admin:
+    container_name: dart_mongodb-admin
+    depends_on:
+      - mongodb
+    hostname: mongo-admin
+    image: mongo-express:0.54.0
+    ports:
+      - "8081:8081"
+    networks:
+      - mongonet
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+
+  backend:
+    container_name: dart_backend
+    depends_on:
+      - mongodb
+    build: ./dart_backend
+    ports:
+      - "4200:4200"
+    networks:
+      - mongonet
+
+  frontend:
+    container_name: dart_frontend
+    depends_on:
+      - backend
+    build: ./flutter_frontend/
+    ports:
+      - "8080:80"
+    networks:
+      - mongonet
+
+networks:
+  mongonet:
+    driver: bridge

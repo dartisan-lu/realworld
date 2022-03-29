@@ -1,0 +1,30 @@
+# Real World Project in Dart/Flutter
+
+This is a simple POC implementation of the project https://github.com/gothinkster/realworld[Real World Project].
+
+Not all functionalities are implemented, but it proves a Solution with Dart/Flutter as Full Stack implementation is realisable. It was a nice training ground to extend my knowledge on these technologies.
+
+Technology Stack:
+
+* Dart
+* Flutter
+* MongoDB
+* Docker and Docker Compose
+
+Some key elements under: xref:asciidoc/01_Intro.adoc[asciidoc]
+
+## Starting the Docker instance.
+
+The easiest way to start the Application is with https://www.docker.com/products/docker-desktop/[Docker Desktop] and the following commands:
+
+[source,bash]
+----
+docker-compose build
+docker-compose up
+----
+
+The Flutter Web Application is accessible by the URL: http://localhost:8080/[]
+
+The Dart Rest API is accessible by the URL: http://localhost:4200/api/health[]
+
+The Mongo DB UI is accessible by the URL: http://localhost:8081/[]
