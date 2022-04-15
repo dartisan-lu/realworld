@@ -23,7 +23,7 @@ class ArticleDetail extends StatelessWidget {
               children: [
                 Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Text(
+                    child: SelectableText(
                       article.title,
                       style: const TextStyle(
                         color: Colors.white,
@@ -42,7 +42,7 @@ class ArticleDetail extends StatelessWidget {
             spacing: 30,
             runSpacing: 30,
             children: [
-              Text(
+              SelectableText(
                 article.body,
                 style: const TextStyle(
                   fontSize: 18,

@@ -33,13 +33,13 @@ class ArticleItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                SelectableText(
                   data.title,
                   style: const TextStyle(
                     fontSize: 24,
                   ),
                 ),
-                Text(
+                SelectableText(
                   data.description,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.rwLightGray,

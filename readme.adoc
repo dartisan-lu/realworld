@@ -13,6 +13,8 @@ Technology Stack:
 
 Some key elements under: xref:asciidoc/01_Intro.adoc[asciidoc]
 
+![Screenshots](./asciidoc/screenshots.png)
+
 ## Starting the Docker instance.
 
 The easiest way to start the Application is with https://www.docker.com/products/docker-desktop/[Docker Desktop] and the following commands:

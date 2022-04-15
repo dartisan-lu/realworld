@@ -220,5 +220,6 @@ class ArticleDetail extends StatelessWidget {
 
 * Web like vs Canvas Application like
 * Knowledge learning curve: Widgets, Compose Flexible and Scrollable elements
+* https://github.com/flutter/flutter/issues/64854[Multi Select Line] also https://github.com/wilsonowilson/better_selection[a possible solution]
 
 xref:03_Backend.adoc[<-] xref:05_Docker.adoc[->]

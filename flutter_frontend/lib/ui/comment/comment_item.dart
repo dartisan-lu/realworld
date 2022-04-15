@@ -20,7 +20,7 @@ class CommentItem extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 20), child: Text(data.body)),
+          Padding(padding: const EdgeInsets.fromLTRB(20, 20, 20, 20), child: SelectableText(data.body)),
           Container(
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: Theme.of(context).colorScheme.rwLightGray)),
