@@ -13,7 +13,7 @@ Technology Stack:
 
 Some key elements under: xref:asciidoc/01_Intro.adoc[asciidoc]
 
-![Screenshots](https://github.com/dartisan-lu/realworld/blob/master/asciidoc/screenshots.png)
+image:https://github.com/dartisan-lu/realworld/blob/master/asciidoc/screenshots.png[]
 
 ## Starting the Docker instance.
 
