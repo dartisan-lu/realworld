@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData defaultTheme = ThemeData(
+  useMaterial3: true,
     primarySwatch: generateMaterialColor(const Color(0xFF5cb85c)),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     iconTheme: const IconThemeData(color: Color(0xFF5cb85c)),

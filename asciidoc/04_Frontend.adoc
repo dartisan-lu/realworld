@@ -220,6 +220,6 @@ class ArticleDetail extends StatelessWidget {
 
 * Web like vs Canvas Application like
 * Knowledge learning curve: Widgets, Compose Flexible and Scrollable elements
-* https://github.com/flutter/flutter/issues/64854[Multi Select Line] also https://github.com/wilsonowilson/better_selection[a possible solution]
+* [.line-through]#https://github.com/flutter/flutter/issues/64854[Multi Select Line] also https://github.com/wilsonowilson/better_selection[a possible solution].# Since Flutter Version 3.3 a new component: https://api.flutter.dev/flutter/material/SelectionArea-class.html[Selection Area] gives the possibility for Multi Select.
 
 xref:03_Backend.adoc[<-] xref:05_Docker.adoc[->]
