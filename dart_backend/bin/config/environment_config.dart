@@ -1,4 +1,4 @@
-import 'package:dotenv/dotenv.dart' show load, env;
+import 'package:dotenv/dotenv.dart';
 
 class EnvironmentConfig {
   late final String tokenSecrect;
@@ -8,7 +8,7 @@ class EnvironmentConfig {
   late final String mongoCollection;
 
   EnvironmentConfig() {
-    load();
+    var env = DotEnv(includePlatformEnvironment: true)..load();
     tokenSecrect = env['token.secret']!;
     webServer = env['server.url']!;
     webPort = int.parse(env['server.port']!);

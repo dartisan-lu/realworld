@@ -17,7 +17,9 @@ class ProviderContextApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => LoginState(),
-      child: const RealWorldApp(),
+      child: const SelectionArea(
+        child: RealWorldApp(),
+      ),
     );
   }
 }
