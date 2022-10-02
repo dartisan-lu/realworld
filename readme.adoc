@@ -30,3 +30,5 @@ The Flutter Web Application is accessible by the URL: http://localhost:8080/[]
 The Dart Rest API is accessible by the URL: http://localhost:4200/api/health[]
 
 The Mongo DB UI is accessible by the URL: http://localhost:8081/[]
+
+On GitHub Pages: https://dartisan-lu-realworld.github.io/
