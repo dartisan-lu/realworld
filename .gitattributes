@@ -1,3 +1,4 @@
 flutter_frontend/android/* linguist-vendored
 flutter_frontend/ios/* linguist-vendored
 flutter_frontend/web/* linguist-vendored
+docs/** linguist-vendored
